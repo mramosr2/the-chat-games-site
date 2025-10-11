@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chat Games — FAQ</title>
-
+  <title>The Chat Games — FAQ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,13 +40,14 @@
         <div class="accordion-item">
           <h2 class="accordion-header" id="q1h">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1" aria-expanded="true" aria-controls="q1">
-              What are The Chat Games?
+              What are Chat Games?
             </button>
           </h2>
-          <div id="q1" class="accordion-collapse collapse show" aria-labelledby="q1h" data-bs-parent="#faqAccordion">
-            <div class="accordion-body text-secondary">They are short, fun experiences you can run entirely inside ChatGPT—great for workshops, meetups, and online sessions.</div>
-          </div>
         </div>
+        <div id="q1" class="accordion-collapse collapse show" aria-labelledby="q1h" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary">They are short, fun experiences you can run entirely inside ChatGPT—great for workshops, meetups, and online sessions.</div>
+        </div>
+
         <div class="accordion-item">
           <h2 class="accordion-header" id="q2h">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2" aria-expanded="false" aria-controls="q2">
@@ -58,6 +58,7 @@
             <div class="accordion-body text-secondary">No extra installs. You just need access to ChatGPT. We’ll provide prompts and simple instructions for each game.</div>
           </div>
         </div>
+
         <div class="accordion-item">
           <h2 class="accordion-header" id="q3h">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3" aria-expanded="false" aria-controls="q3">
@@ -86,7 +87,7 @@
 
   <footer class="py-4 mt-auto text-white">
     <div class="container d-flex justify-content-between small">
-      <div>© <span id="year"></span> The Chat Games</div>
+      <div>© <span id="year"></span> The Chat Games.</div>
       <div>
         <a href="about.html" class="link-light text-decoration-none me-3 underline-nav">About</a>
         <a href="games.html" class="link-light text-decoration-none underline-nav">Games</a>
@@ -105,7 +106,6 @@
           <form class="row g-3">
             <div class="col-12"><label for="name" class="form-label">Name</label><input type="text" class="form-control" id="name" required></div>
             <div class="col-12"><label for="email" class="form-label">Email</label><input type="email" class="form-control" id="email" required></div>
-            <div class="col-12"><label for="role" class="form-label">Role (optional)</label><input type="text" class="form-control" id="role"></div>
             <div class="col-12"><label for="event" class="form-label">Event</label><input type="text" class="form-control" id="event" placeholder="CSULA or CSUN"></div>
           </form>
         </div>
