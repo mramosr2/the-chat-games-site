@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 
-// Sequential fade: reveal children of any .fade-seq container one-by-one
+// Sequential fade (1s per item)
 function initSequentialFades() {
   const groups = document.querySelectorAll('.fade-seq');
   if (!groups.length) return;
@@ -139,12 +139,8 @@ function initSequentialFades() {
       items.forEach((el, i) => {
         const delaySec = i; // 1 second per item
         el.style.transitionDelay = `${delaySec}s`;
-        // next frame to ensure transitions apply
-        requestAnimationFrame(() => el.classList.add('revealed'));
-
-        // clear delay after it finishes so future interactions aren’t delayed
-        const totalMs = (delaySec + 1) * 1000; // delay + 1s duration
-        setTimeout(() => { el.style.transitionDelay = ''; }, totalMs + 50);
+        requestAnimationFrame(() => el.classList.add('show'));
+        setTimeout(() => { el.style.transitionDelay = ''; }, (delaySec + 1) * 1000 + 50);
       });
 
       obs.unobserve(group);
@@ -157,3 +153,10 @@ function initSequentialFades() {
 document.addEventListener('DOMContentLoaded', () => {
   initSequentialFades();
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const v = document.getElementById('demoVideo');
+  if (v && v.textTracks && v.textTracks[0]) v.textTracks[0].mode = 'showing';
+});
+
