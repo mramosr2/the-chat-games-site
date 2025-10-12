@@ -160,3 +160,73 @@ document.addEventListener('DOMContentLoaded', () => {
   if (v && v.textTracks && v.textTracks[0]) v.textTracks[0].mode = 'showing';
 });
 
+// RSVP modal: validate + send to Formspree
+(() => {
+  const modal  = document.getElementById('signupModal');
+  if (!modal) return;
+
+  const form   = document.getElementById('signupForm');
+  const nameEl = form.querySelector('#name');
+  const email  = form.querySelector('#email');
+  const eventI = form.querySelector('#event');
+  const submit = form.querySelector('#signupSubmit');
+  const errors = form.querySelector('#signupErrors');
+  const okBox  = form.querySelector('#signupSuccess');
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const showErr = (t) => { errors.textContent = t; errors.classList.remove('d-none'); };
+  const clearErr = () => { errors.textContent=''; errors.classList.add('d-none'); };
+  const showOk = (t) => { okBox.textContent = t; okBox.classList.remove('d-none'); };
+  const clearOk = () => { okBox.textContent=''; okBox.classList.add('d-none'); };
+
+  const validate = () => {
+    let ok = true;
+    if ((nameEl.value||'').trim().length < 2) { nameEl.setCustomValidity('x'); ok = false; } else nameEl.setCustomValidity('');
+    if (!emailPattern.test((email.value||'').trim())) { email.setCustomValidity('x'); ok = false; } else email.setCustomValidity('');
+    if ((eventI.value||'').trim().length < 2) { eventI.setCustomValidity('x'); ok = false; } else eventI.setCustomValidity('');
+    submit.disabled = !ok;
+    if (ok) clearErr();
+    return ok;
+  };
+
+  [nameEl, email, eventI].forEach(el => {
+    el.addEventListener('input', () => { if (el !== email) el.value = el.value.replace(/^\s+/, ''); validate(); });
+    el.addEventListener('blur', validate);
+  });
+
+  modal.addEventListener('shown.bs.modal', () => {
+    form.classList.remove('was-validated');
+    submit.disabled = true;
+    clearErr(); clearOk();
+    nameEl.focus();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validate()) { form.classList.add('was-validated'); return; }
+
+    const original = submit.textContent;
+    submit.disabled = true;
+    submit.textContent = 'Sending…';
+    clearErr(); clearOk();
+
+    try {
+      const fd = new FormData(form);
+      fd.set('_subject', `New RSVP — ${eventI.value.trim()} — ${nameEl.value.trim()}`);
+      fd.set('_replyto', (email.value||'').trim());
+
+      const res = await fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body: fd });
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+
+      showOk('Thanks! You’re on the list. We’ll email details soon.');
+      form.reset();
+      form.classList.remove('was-validated');
+      setTimeout(() => { bootstrap.Modal.getInstance(modal)?.hide(); clearOk(); }, 1400);
+    } catch (err) {
+      showErr('Sorry, we couldn’t submit your RSVP. Please try again in a moment.');
+      submit.disabled = false;
+    } finally {
+      submit.textContent = original;
+    }
+  });
+})();

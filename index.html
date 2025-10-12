@@ -40,17 +40,23 @@
     <div class="row justify-content-center hero-center">
       <div class="col-12 col-xl-10">
         <div class="hero-card text-center p-5 fade-seq mx-auto">
-  <h1 class="display-3 fw-bold mb-2 fade-slide">The Chat Games</h1>
-  <p class="lead tagline mb-3 fade-slide">Let the Chat Games Begin</p>
+  <figure class="mb-3 fade-slide">
+    <img src="images/logo-chat-games.png"
+         alt="The Chat Games — Let the Chat Games Begin"
+         class="hero-logo img-fluid">
+  </figure>
+
   <div class="mb-3 fade-slide">
     <a href="games.html" class="btn btn-dark btn-lg underline-btn">Explore Games</a>
   </div>
+
   <div class="d-flex justify-content-center flex-wrap gap-4 text-secondary small fade-slide">
     <div><i class="bi bi-lightning-charge"></i> Lightweight</div>
     <div><i class="bi bi-universal-access"></i> Accessible</div>
     <div><i class="bi bi-bootstrap"></i> Bootstrap 5</div>
   </div>
 </div>
+
 
         </div>
       </div>
@@ -200,36 +206,46 @@
   </footer>
 
   <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content modal-pop">
-        <div class="modal-header">
-          <h5 class="modal-title" id="signupTitle">Join The Chat Games list</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form class="row g-3">
-            <div class="col-12">
-              <label for="name" class="form-label">Name</label>
-              <input type="text" class="form-control" id="name" placeholder="Your name" required>
-            </div>
-            <div class="col-12">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
-            </div>
-            <div class="col-12">
-              <label for="event" class="form-label">Event</label>
-              <input type="text" class="form-control" id="event" placeholder="CSULA or CSUN" aria-describedby="eventHelp">
-              <div id="eventHelp" class="form-text">This auto-fills if you clicked an RSVP button.</div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary underline-btn" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-dark underline-btn">Notify me</button>
+  <div class="modal-dialog modal-dialog-centered">
+    <form id="signupForm" class="modal-content modal-pop needs-validation"
+          action="https://formspree.io/f/xpwyyeek" method="POST" novalidate>
+      <div class="modal-header">
+        <h5 class="modal-title" id="signupTitle">Join The Chat Games list</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div id="signupErrors" class="alert alert-danger d-none" role="alert" aria-live="assertive"></div>
+        <div id="signupSuccess" class="alert alert-success d-none" role="status" aria-live="polite"></div>
+
+        <div class="row g-3">
+          <div class="col-12">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required minlength="2">
+            <div class="invalid-feedback">Please enter your name (2+ characters).</div>
+          </div>
+          <div class="col-12">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required autocomplete="email" inputmode="email">
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
+          <div class="col-12">
+            <label for="event" class="form-label">Event</label>
+            <input type="text" class="form-control" id="event" name="event" placeholder="CSULA or CSUN" aria-describedby="eventHelp" required minlength="2">
+            <div id="eventHelp" class="form-text">This auto-fills if you clicked an RSVP button.</div>
+            <div class="invalid-feedback">Please enter an event.</div>
+          </div>
         </div>
       </div>
-    </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary underline-btn" data-bs-dismiss="modal">Close</button>
+        <button type="submit" id="signupSubmit" class="btn btn-dark underline-btn" disabled>Sign Up</button>
+      </div>
+    </form>
   </div>
+</div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/main.js"></script>
