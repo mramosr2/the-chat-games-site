@@ -171,3 +171,5 @@ footer { background-color: var(--black); }
 @media (max-width: 576px) {
   .hero-card { padding: 1.75rem !important; }
 }
+
+.site-main { padding-top: 4.5rem; } /* adjust if your navbar is taller/shorter */
