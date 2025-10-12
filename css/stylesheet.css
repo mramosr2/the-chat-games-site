@@ -123,19 +123,22 @@ footer { background-color: var(--black); }
 .hero-center > [class*="col-"] { display: flex; }
 .hero-center .hero-card { width: 100%; }
 
-/* Typing host/element styles */
-.typehost { display:block; }
-.typewrite { 
-  display:inline-block; 
-  white-space:nowrap; 
-  overflow:hidden; 
-  vertical-align:bottom; 
-  border-right:3px solid currentColor; 
-  animation: caretBlink 1s steps(1) infinite;
-}
-.typewrite.done { border-right-color: transparent; animation: none; }
-@keyframes caretBlink { 50% { border-right-color: transparent; } }
 
 /* Ensure the typed lines are not hidden by fade-slide on the parent */
 [data-typing="hero"] .typehost, 
 [data-typing="hero"] .typewrite { opacity: 1 !important; transform: none !important; transition: none !important; }
+
+.fade-slide {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-slide { transition: none; }
+}

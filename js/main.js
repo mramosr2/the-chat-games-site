@@ -36,61 +36,124 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// --- Hero typing effect: steady, visible caret, start after hero reveal ---
+
+// Contact modal: validate + send via Formspree (no Mail app)
 (() => {
-  const group = document.querySelector('[data-typing="hero"]');
-  if (!group) return;
+  const modal  = document.getElementById('contactModal');
+  if (!modal) return;
 
-  const titleEl = document.getElementById('tgTitleText');
-  const sloganEl = document.getElementById('tgSloganText');
-  const afterEls = group.querySelectorAll('.after-typing');
+  const form   = modal.querySelector('#contactForm');
+  const email  = modal.querySelector('#contactEmail');
+  const subj   = modal.querySelector('#contactSubject');
+  const msg    = modal.querySelector('#contactMessage');
+  const submit = modal.querySelector('#contactSubmit');
+  const errors = modal.querySelector('#contactErrors');
+  const okBox  = modal.querySelector('#contactSuccess');
+  const fields = [email, subj, msg];
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const typeText = (el, text, intervalMs) => new Promise(resolve => {
-    el.textContent = '';
-    let i = 0;
-    const timer = setInterval(() => {
-      if (i < text.length) {
-        el.textContent += text.charAt(i++);
-      } else {
-        clearInterval(timer);
-        el.classList.add('done'); // hide caret after done
-        resolve();
-      }
-    }, intervalMs);
+  const showErr = (txt) => { errors.textContent = txt; errors.classList.remove('d-none'); };
+  const clearErr = () => { errors.textContent = ''; errors.classList.add('d-none'); };
+  const showOk = (txt) => { okBox.textContent = txt; okBox.classList.remove('d-none'); };
+  const clearOk = () => { okBox.textContent = ''; okBox.classList.add('d-none'); };
+
+  const validate = () => {
+    const errs = [];
+    const e = (email.value || '').trim();
+    const s = (subj.value || '').trim();
+    const m = (msg.value || '').trim();
+
+    if (!e || !emailPattern.test(e)) { email.setCustomValidity('invalid'); errs.push('Enter a valid email address.'); } else email.setCustomValidity('');
+    if (s.length < 5) { subj.setCustomValidity('short'); errs.push('Subject must be at least 5 characters.'); } else subj.setCustomValidity('');
+    if (m.length < 5) { msg.setCustomValidity('short'); errs.push('Message must be at least 5 characters.'); } else msg.setCustomValidity('');
+
+    if (errs.length) { submit.disabled = true; showErr(`Please fix the following: ${errs.join(' ')}`); }
+    else { submit.disabled = false; clearErr(); }
+
+    return errs.length === 0;
+  };
+
+  fields.forEach(el => {
+    el.addEventListener('input', () => {
+      if (el !== email) el.value = el.value.replace(/^\s+/, '');
+      validate();
+      if (form.classList.contains('was-validated')) form.checkValidity();
+    });
+    el.addEventListener('blur', validate);
   });
 
-  const startTyping = () => {
-    const tText = titleEl?.getAttribute('data-text') || 'The Chat Games';
-    const sText = sloganEl?.getAttribute('data-text') || 'Let the Chat Games Begin';
-    typeText(titleEl, tText, 170)
-      .then(() => typeText(sloganEl, sText, 150))
-      .then(() => {
-        afterEls.forEach(el => {
-          el.style.transition = 'opacity .6s ease, transform .6s ease';
-          requestAnimationFrame(() => {
-            el.style.opacity = '1';
-            el.style.transform = 'none';
-          });
-        });
+  modal.addEventListener('shown.bs.modal', () => {
+    form.reset();
+    form.classList.remove('was-validated');
+    submit.disabled = true;
+    clearErr(); clearOk();
+    email.focus();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearOk();
+    const valid = validate();
+    if (!valid) { form.classList.add('was-validated'); return; }
+
+    submit.disabled = true;
+    const original = submit.textContent;
+    submit.textContent = 'Sending…';
+
+    try {
+      const formData = new FormData(form);
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
       });
-  };
 
-  const beginWhenVisible = () => {
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            // Wait a beat for the card's fade-slide transition to finish
-            setTimeout(startTyping, 400);
-            io.disconnect();
-          }
-        });
-      }, { threshold: 0.2 });
-      io.observe(group);
-    } else {
-      startTyping();
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+
+      showOk('Thanks! Your message was sent. We’ll get back to you soon.');
+      form.reset();
+      form.classList.remove('was-validated');
+      setTimeout(() => { bootstrap.Modal.getInstance(modal)?.hide(); clearOk(); }, 1600);
+    } catch (err) {
+      showErr('Sorry, something went wrong sending your message. Please try again in a moment.');
+      submit.disabled = false;
+    } finally {
+      submit.textContent = original;
     }
-  };
-
-  beginWhenVisible();
+  });
 })();
+
+
+// Sequential fade: reveal children of any .fade-seq container one-by-one
+function initSequentialFades() {
+  const groups = document.querySelectorAll('.fade-seq');
+  if (!groups.length) return;
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+
+      const group = entry.target;
+      const items = Array.from(group.querySelectorAll(':scope .fade-slide'));
+
+      items.forEach((el, i) => {
+        const delaySec = i; // 1 second per item
+        el.style.transitionDelay = `${delaySec}s`;
+        // next frame to ensure transitions apply
+        requestAnimationFrame(() => el.classList.add('revealed'));
+
+        // clear delay after it finishes so future interactions aren’t delayed
+        const totalMs = (delaySec + 1) * 1000; // delay + 1s duration
+        setTimeout(() => { el.style.transitionDelay = ''; }, totalMs + 50);
+      });
+
+      obs.unobserve(group);
+    });
+  }, { threshold: 0.2 });
+
+  groups.forEach(g => io.observe(g));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initSequentialFades();
+});
