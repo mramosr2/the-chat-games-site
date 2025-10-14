@@ -33,47 +33,98 @@
     </div>
   </nav>
 
-  <main class="site-main container page-pad">
-    <header class="mb-4 fade-slide">
-      <h1 class="fw-semibold">Featured Games</h1>
-      <p class="text-secondary">Pick a game and start—each includes a short prompt you can drop into ChatGPT.</p>
+ <main id="games" class="page-pad-lg py-5">
+  <div class="container">
+    <header class="text-center mb-4 fade-seq">
+      <h1 class="fade-slide">Games</h1>
+      <p class="text-muted fade-slide">Play AI-powered challenges. Launch in ChatGPT.</p>
     </header>
 
-    <div class="row g-3 g-md-4">
-      <div class="col-md-6 col-lg-4">
-        <div class="card h-100 border-0 shadow-sm fade-slide">
-          <div class="card-body">
-            <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-stars"></i><span class="text-uppercase small text-secondary">Party</span></div>
-            <h5 class="card-title mb-2">Story Relay</h5>
-            <p class="card-text text-secondary">Players write a story one line at a time with GPT as the chaotic narrator.</p>
-            <a href="#" class="btn btn-dark btn-sm underline-btn">Play</a>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4 justify-content-center fade-seq">
+      <!-- Emojination -->
+      <div class="col fade-slide">
+        <div class="card card-game h-100 shadow-sm">
+          <div class="card-body text-center d-flex flex-column">
+            <div class="game-icon" aria-hidden="true">🎃</div>
+            <h2 class="h5 mt-3">Emojination</h2>
+            <p class="small text-muted flex-grow-1 mb-3">
+              A spooky Halloween emoji storytelling game — 5 tries, hints, and 80% to win.
+            </p>
+            <a class="btn btn-outline-dark mt-auto"
+               href="https://chatgpt.com/g/g-68ed80ff5c78819181dca2b76e24394f-emojination"
+               target="_blank" rel="noopener"
+               aria-label="Open Emojination in ChatGPT">
+              Play on ChatGPT
+            </a>
           </div>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-4">
-        <div class="card h-100 border-0 shadow-sm fade-slide">
-          <div class="card-body">
-            <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-mortarboard"></i><span class="text-uppercase small text-secondary">Trivia</span></div>
-            <h5 class="card-title mb-2">Quickfire Quiz</h5>
-            <p class="card-text text-secondary">Fast rounds of themed questions with scoring and hint lifelines.</p>
-            <a href="#" class="btn btn-dark btn-sm underline-btn">Play</a>
+      <!-- Riddle Room -->
+      <div class="col fade-slide">
+        <div class="card card-game h-100 shadow-sm">
+          <div class="card-body text-center d-flex flex-column">
+            <div class="game-icon" aria-hidden="true">❓</div>
+            <h2 class="h5 mt-3">Riddle Room</h2>
+            <p class="small text-muted flex-grow-1 mb-3">
+              A cinematic riddle master — three attempts before the labyrinth resets.
+            </p>
+            <a class="btn btn-outline-dark mt-auto"
+               href="https://chatgpt.com/g/g-68ee022e84288191b3376bd3f18b2745-riddle-room"
+               target="_blank" rel="noopener"
+               aria-label="Open Riddle Room in ChatGPT">
+              Play on ChatGPT
+            </a>
           </div>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-4">
-        <div class="card h-100 border-0 shadow-sm fade-slide">
-          <div class="card-body">
-            <div class="d-flex align-items-center gap-2 mb-2"><i class="bi bi-lock"></i><span class="text-uppercase small text-secondary">Puzzle</span></div>
-            <h5 class="card-title mb-2">Riddle Room</h5>
-            <p class="card-text text-secondary">Solve escalating riddles; lose points if you ask for extra clues.</p>
-            <a href="#" class="btn btn-dark btn-sm underline-btn">Play</a>
+      <!-- Mr. Detective -->
+      <div class="col fade-slide">
+        <div class="card card-game h-100 shadow-sm">
+          <div class="card-body text-center d-flex flex-column">
+            <div class="game-icon" aria-hidden="true">🕵️</div>
+            <h2 class="h5 mt-3">Mr. Detective</h2>
+            <p class="small text-muted flex-grow-1 mb-3">
+              Solve a deadly mystery — suspects, and even you, can die before truth is revealed.
+            </p>
+            <a class="btn btn-outline-dark mt-auto"
+               href="https://chatgpt.com/g/g-68ee2375d8fc8191be3da0bff0302903-mr-detective-gpt"
+               target="_blank" rel="noopener"
+               aria-label="Open Mr. Detective in ChatGPT">
+              Play on ChatGPT
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prompt Runner -->
+      <div class="col fade-slide">
+        <div class="card card-game h-100 shadow-sm">
+          <div class="card-body text-center d-flex flex-column">
+            <div class="game-icon" aria-hidden="true">🧭</div>
+            <h2 class="h5 mt-3">Prompt Runner</h2>
+            <p class="small text-muted flex-grow-1 mb-3">
+              A serious, story-driven maze with riddles, backtracking, characters, and challenge.
+            </p>
+            <a class="btn btn-outline-dark mt-auto"
+               href="https://chatgpt.com/g/g-68ee1abdf3108191b4925c7dcb07cae7-prompt-runner"
+               target="_blank" rel="noopener"
+               aria-label="Open Prompt Runner in ChatGPT">
+              Play on ChatGPT
+            </a>
           </div>
         </div>
       </div>
     </div>
-  </main>
+
+    <p class="text-center text-muted mt-4 small">
+  Play on a personal ChatGPT account (school accounts disable GPTs).
+</p>
+  </div>
+</main>
+
+
 
   <footer class="py-4 mt-auto text-white">
     <div class="container d-flex justify-content-between small">
