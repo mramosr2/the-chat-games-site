@@ -197,3 +197,6 @@ footer { background-color: var(--black); }
 
 /* Bigger top offset for pages with a large title under the fixed navbar */
 .page-pad-lg { padding-top: calc(var(--nav-h) + 2.75rem); }
+:root { --nav-h: 64px; } /* fallback */
+body.nav-fixed-pad { padding-top: calc(var(--nav-h) + 0.5rem); }
+html { scroll-padding-top: calc(var(--nav-h) + 0.5rem); } /* correct in-page anchor jumps */
