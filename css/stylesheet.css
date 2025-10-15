@@ -200,3 +200,70 @@ footer { background-color: var(--black); }
 :root { --nav-h: 64px; } /* fallback */
 body.nav-fixed-pad { padding-top: calc(var(--nav-h) + 0.5rem); }
 html { scroll-padding-top: calc(var(--nav-h) + 0.5rem); } /* correct in-page anchor jumps */
+
+/* Raised section card for hero/intro copy */
+.section-card{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:1.25rem;
+  padding:2.25rem 2rem;
+  box-shadow:0 .75rem 2rem rgba(0,0,0,.06);
+  max-width:960px;
+}
+.section-card p { max-width: 68ch; margin-left: auto; margin-right: auto; }
+.section-card p + p { margin-top: 1rem; }
+
+
+/* Mobile padding tweak */
+@media (max-width:576px){
+  .section-card{ padding:1.5rem; border-radius:1rem; }
+}
+
+/* Feature cards */
+.feature-card {
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 1rem;
+  background: #fff;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.feature-card:hover { transform: translateY(-2px); box-shadow: 0 .75rem 1.5rem rgba(0,0,0,.08); }
+.feature-card .card-body { padding: 1.5rem; }
+
+/* Feature icon badge */
+.feature-icon{
+  width: 3.25rem; height: 3.25rem; border-radius: 50%;
+  display: grid; place-items: center; margin: 0 auto;
+  font-size: 1.6rem; line-height: 1;
+  background: linear-gradient(180deg,#f7f7f7,#efefef);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+}
+
+/* Keep all cards the same height and centered text */
+#about-features .card { height: 100%; }
+
+/* Keeps feature cards off the left/right edges */
+.section-inner {
+  max-width: 1100px;           /* keeps the row narrower than the page */
+  margin: 0 auto;              /* centers it */
+  padding-left: clamp(16px, 4vw, 40px);
+  padding-right: clamp(16px, 4vw, 40px);
+}
+
+.bio-card{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.07);
+  border-radius:1rem;
+  padding:1.5rem;
+  box-shadow:0 .75rem 2rem rgba(0,0,0,.05);
+}
+.bio-photo{
+  width:100%;
+  height:100%;
+  max-height:360px;
+  object-fit:cover;
+  border-radius:1rem;
+}
+@media (max-width: 767.98px){
+  .bio-card{ padding:1rem; }
+  .bio-photo{ max-height:300px; }
+}
