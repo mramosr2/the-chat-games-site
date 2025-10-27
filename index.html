@@ -93,7 +93,7 @@
           <h2 class="fw-semibold fade-slide mb-3">What Are The Chat Games?</h2>
 
           <p class="text-secondary fade-slide mb-3">
-            The Chat Games are games that test problem solving, creativity, and brilliance. These games were created by ChatGPT ambassadors Diego Ayala and Michael Ramos to show how ChatGPT can be used as a tool rather than a cheat code. To do this, we will host events at both California State University Northridge and California State University Los Angeles.
+            The Chat Games are games that test problem solving, creativity, and brilliance. These games were created by ChatGPT ambassadors Diego Ayala and Michael Ramos to show how ChatGPT can be used as a tool rather than a cheat code. To do this, we will host events at both California State University Northridge and California State University Northridge.
           </p>
 
           <p class="text-secondary fade-slide mb-3">
@@ -151,7 +151,7 @@
         <div class="feature-icon" aria-hidden="true">📋</div>
         <h3 class="h5 mt-3 mb-2">Guidelines</h3>
         <p class="text-secondary small mb-0">
-          There will be three secret games. Participants will be placed in groups of 4-5 people
+          There will be three secret games. Participants will join groups of 4–5. RSVP to secure your spot.
         </p>
       </div>
     </div>
@@ -187,9 +187,9 @@
           <div class="card-body">
             <h5 class="card-title mb-2">CSUN — Chat Games Night</h5>
             <ul class="list-unstyled text-secondary mb-3">
-              <li><i class="bi bi-geo"></i> Location: TBA</li>
-              <li><i class="bi bi-calendar-event"></i> Date: TBA</li>
-              <li><i class="bi bi-clock"></i> Time: TBA</li>
+              <li><i class="bi bi-geo"></i> Location: Jacaranda Hall 2524</li>
+              <li><i class="bi bi-calendar-event"></i> Dates: November 5th, 2025 and November 19th, 2025 </li>
+              <li><i class="bi bi-clock"></i> Time: 1:30PM - 3:30PM</li>
             </ul>
             <a class="btn btn-dark underline-btn" data-bs-toggle="modal" href="#signupModal" data-event="CSUN">RSVP for CSUN</a>
           </div>
@@ -215,8 +215,8 @@
             <h5 class="card-title mb-2">CSULA — Chat Games Night</h5>
             <ul class="list-unstyled text-secondary mb-3">
               <li><i class="bi bi-geo"></i> Location: TBA</li>
-              <li><i class="bi bi-calendar-event"></i> Date: TBA</li>
-              <li><i class="bi bi-clock"></i> Time: TBA</li>
+              <li><i class="bi bi-calendar-event"></i> Date: November 20th, 2025</li>
+              <li><i class="bi bi-clock"></i> Time: 2:30PM - 5:00PM</li>
             </ul>
             <a class="btn btn-dark underline-btn" data-bs-toggle="modal" href="#signupModal" data-event="CSULA">RSVP for CSULA</a>
           </div>
@@ -264,6 +264,14 @@
             <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required autocomplete="email" inputmode="email">
             <div class="invalid-feedback">Please enter a valid email.</div>
           </div>
+          <div class="col-12">
+  <label for="eventDate" class="form-label">Event Date</label>
+  <select class="form-select" id="eventDate" name="event_date" required disabled aria-describedby="dateHelp">
+    <option value="" selected>Select an event first</option>
+  </select>
+  <div id="dateHelp" class="form-text">Dates depend on the campus you choose.</div>
+  <div class="invalid-feedback">Please choose a date.</div>
+</div>
           <div class="col-12">
             <label for="event" class="form-label">Event</label>
             <input type="text" class="form-control" id="event" name="event" placeholder="CSULA or CSUN" aria-describedby="eventHelp" required minlength="2">
