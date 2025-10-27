@@ -241,3 +241,83 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.disabled = !valid;
   });
 })();
+
+// ----- Formspree AJAX (stay in modal, no redirect) -----
+(function () {
+  function wireAjaxForm(opts) {
+    const form = document.getElementById(opts.formId);
+    if (!form) return;
+
+    const success = document.getElementById(opts.successId);
+    const errors  = document.getElementById(opts.errorsId);
+    const submit  = document.getElementById(opts.submitId);
+
+    function show(el, msg) {
+      if (!el) return;
+      el.textContent = msg || el.textContent;
+      el.classList.remove('d-none');
+    }
+    function hide(el) { if (el) el.classList.add('d-none'); }
+
+    form.addEventListener('submit', async (e) => {
+      // Use built-in validation; if invalid, let Bootstrap styles show
+      if (!form.checkValidity()) return;
+      e.preventDefault(); // prevent page navigation
+
+      hide(success); hide(errors);
+      submit && (submit.disabled = true);
+
+      try {
+        const endpoint = form.getAttribute('action');
+        const data = new FormData(form);
+
+        const resp = await fetch(endpoint, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (resp.ok) {
+          form.reset();
+          // if your RSVP code auto-fills fields, re-disable submit until valid again
+          submit && (submit.disabled = true);
+          show(success, 'Thanks — you’re on the list! We’ll be in touch soon.');
+        } else {
+          let msg = 'Something went wrong. Please try again.';
+          try {
+            const j = await resp.json();
+            if (j && j.errors && j.errors.length) msg = j.errors.map(e => e.message).join(' ');
+          } catch {}
+          show(errors, msg);
+        }
+      } catch (err) {
+        show(errors, 'Network error. Please try again in a moment.');
+      } finally {
+        submit && (submit.disabled = false);
+      }
+    });
+  }
+
+  // Wire both RSVP and Contact (if present)
+  wireAjaxForm({
+    formId: 'signupForm',
+    successId: 'signupSuccess',
+    errorsId: 'signupErrors',
+    submitId: 'signupSubmit'
+  });
+  wireAjaxForm({
+    formId: 'contactForm',
+    successId: 'contactSuccess',
+    errorsId: 'contactErrors',
+    submitId: 'contactSubmit'
+  });
+
+  // Optional: clear alerts whenever the modal opens
+  ['signupModal','contactModal'].forEach(id => {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.addEventListener('show.bs.modal', () => {
+      modal.querySelectorAll('.alert').forEach(a => a.classList.add('d-none'));
+    });
+  });
+})();
