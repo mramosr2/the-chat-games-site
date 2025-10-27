@@ -160,73 +160,84 @@ document.addEventListener('DOMContentLoaded', () => {
   if (v && v.textTracks && v.textTracks[0]) v.textTracks[0].mode = 'showing';
 });
 
-// RSVP modal: validate + send to Formspree
-(() => {
-  const modal  = document.getElementById('signupModal');
-  if (!modal) return;
-
-  const form   = document.getElementById('signupForm');
-  const nameEl = form.querySelector('#name');
-  const email  = form.querySelector('#email');
-  const eventI = form.querySelector('#event');
-  const submit = form.querySelector('#signupSubmit');
-  const errors = form.querySelector('#signupErrors');
-  const okBox  = form.querySelector('#signupSuccess');
-
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const showErr = (t) => { errors.textContent = t; errors.classList.remove('d-none'); };
-  const clearErr = () => { errors.textContent=''; errors.classList.add('d-none'); };
-  const showOk = (t) => { okBox.textContent = t; okBox.classList.remove('d-none'); };
-  const clearOk = () => { okBox.textContent=''; okBox.classList.add('d-none'); };
-
-  const validate = () => {
-    let ok = true;
-    if ((nameEl.value||'').trim().length < 2) { nameEl.setCustomValidity('x'); ok = false; } else nameEl.setCustomValidity('');
-    if (!emailPattern.test((email.value||'').trim())) { email.setCustomValidity('x'); ok = false; } else email.setCustomValidity('');
-    if ((eventI.value||'').trim().length < 2) { eventI.setCustomValidity('x'); ok = false; } else eventI.setCustomValidity('');
-    submit.disabled = !ok;
-    if (ok) clearErr();
-    return ok;
+// --- RSVP: event-driven date options ---
+(function () {
+  const EVENT_DATES = {
+    CSUN: [
+      { label: 'November 5th, 2025', value: 'November 5th, 2025' },
+      { label: 'November 19th, 2025', value: 'November 19th, 2025' }
+    ],
+    CSULA: [
+      { label: 'November 20th, 2025', value: 'November 20th, 2025' }
+    ]
   };
 
-  [nameEl, email, eventI].forEach(el => {
-    el.addEventListener('input', () => { if (el !== email) el.value = el.value.replace(/^\s+/, ''); validate(); });
-    el.addEventListener('blur', validate);
-  });
+  const modal = document.getElementById('signupModal');
+  if (!modal) return;
 
-  modal.addEventListener('shown.bs.modal', () => {
-    form.classList.remove('was-validated');
-    submit.disabled = true;
-    clearErr(); clearOk();
-    nameEl.focus();
-  });
+  const form = modal.querySelector('#signupForm');
+  const eventInput = form.querySelector('#event');
+  const dateSelect  = form.querySelector('#eventDate');
+  const submitBtn   = form.querySelector('#signupSubmit');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!validate()) { form.classList.add('was-validated'); return; }
+  function normalizeCampus(str) {
+    if (!str) return '';
+    const s = String(str).trim().toUpperCase();
+    // accept common variations
+    if (s.startsWith('CSUN')) return 'CSUN';
+    if (s.startsWith('CSULA') || s.includes('LA')) return 'CSULA';
+    return s;
+  }
 
-    const original = submit.textContent;
-    submit.disabled = true;
-    submit.textContent = 'Sending…';
-    clearErr(); clearOk();
+  function populateDates(campus) {
+    const key = normalizeCampus(campus);
+    const options = EVENT_DATES[key];
 
-    try {
-      const fd = new FormData(form);
-      fd.set('_subject', `New RSVP — ${eventI.value.trim()} — ${nameEl.value.trim()}`);
-      fd.set('_replyto', (email.value||'').trim());
-
-      const res = await fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body: fd });
-      if (!res.ok) throw new Error(`Request failed (${res.status})`);
-
-      showOk('Thanks! You’re on the list. We’ll email details soon.');
-      form.reset();
-      form.classList.remove('was-validated');
-      setTimeout(() => { bootstrap.Modal.getInstance(modal)?.hide(); clearOk(); }, 1400);
-    } catch (err) {
-      showErr('Sorry, we couldn’t submit your RSVP. Please try again in a moment.');
-      submit.disabled = false;
-    } finally {
-      submit.textContent = original;
+    dateSelect.innerHTML = '';
+    if (!options) {
+      dateSelect.disabled = true;
+      dateSelect.innerHTML = `<option value="" selected>Select an event first</option>`;
+      return;
     }
+    // build options
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Choose a date…';
+    placeholder.selected = true;
+    placeholder.disabled = true;
+    dateSelect.appendChild(placeholder);
+
+    options.forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o.value;
+      opt.textContent = o.label;
+      dateSelect.appendChild(opt);
+    });
+
+    dateSelect.disabled = false;
+  }
+
+  // When the modal opens from a button, use its data-event to set campus & dates.
+  modal.addEventListener('show.bs.modal', (ev) => {
+    const trigger = ev.relatedTarget;
+    if (trigger && trigger.dataset && trigger.dataset.event) {
+      eventInput.value = trigger.dataset.event;
+    }
+    populateDates(eventInput.value);
+    // reset selection each time modal opens
+    if (!dateSelect.disabled) dateSelect.value = '';
+    submitBtn.disabled = true;
+  });
+
+  // If the user types/edits the campus manually, update dates live.
+  eventInput.addEventListener('input', () => {
+    populateDates(eventInput.value);
+    if (!dateSelect.disabled) dateSelect.value = '';
+  });
+
+  // Basic enable/disable of submit based on required fields
+  form.addEventListener('input', () => {
+    const valid = form.checkValidity();
+    submitBtn.disabled = !valid;
   });
 })();
