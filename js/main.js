@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
 (function () {
   const EVENT_DATES = {
     CSUN: [
-      { label: 'November 5th, 2025', value: 'November 5th, 2025' },
+      { label: 'November 12th, 2025', value: 'November 12th, 2025' },
       { label: 'November 19th, 2025', value: 'November 19th, 2025' }
     ],
     CSULA: [
